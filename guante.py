@@ -2,8 +2,10 @@
 import spidev
 from time import sleep
 import os
+from gpiozero import Servo
+from time import sleep
 
-
+servo = Servo(18)
 #Abrimos el bus SPI
 spi = spidev.SpiDev()#declaramos el objeto 
 spi.open(0,0)#SPIO
@@ -27,18 +29,23 @@ def sensor_pull(sensor_pulgar):
 def sensor_ind(sensor_indice):
     if(sensor_indice < 800 or sensor_indice > 899):
         print('-Flexionado sensor indice')
+        servo.max()
+        sleep(1)
 
 def sensor_mid(sensor_medio):
-    if(sensor_medio < 710 or sensor_medio > 770):
-        print('                           -Flexionado sensor medio')
-
+    if(sensor_medio < 700 or sensor_medio > 800):
+        print('-Flexionado sensor medio')
+        servo.mid()
+        sleep(1)
 def sensor_anu(sensor_anular):
-    if(sensor_anular < 750 or sensor_anular > 770):
+    if(sensor_anular < 700 or sensor_anular > 800):
         print('  -Flexionado sensor anular')
-        
+        servo.min()
+        sleep(1)
 def sensor_men(sensor_menique):
-    if(sensor_menique < 710 or sensor_menique > 770):
+    if(sensor_menique < 700 or sensor_menique > 800):
         print('-Flexionado sensor meñique')
+      
 
 
 while True:
@@ -54,6 +61,9 @@ while True:
     sensor_menique=leercanal(4)#en el canal 2 de 8 esta el flex para el dedo anular
     
     #movimiento(sensor_indice, sensor_medio, sensor_anular)#indica cual se está moviendo.
+    sensor_anu(sensor_anular)
+    sensor_mid(sensor_medio)
+    sensor_ind(sensor_indice)
 
     print('_____________________________________________________________________________________________________________________')
     print("sensor pulgar {} bits | Sensor indice {} bits | Sensor medio {} bits | Sensor anular {} bits |sensor meñique {} bits |".format (sensor_pulgar, sensor_indice, sensor_medio, sensor_anular,sensor_menique))
