@@ -49,7 +49,10 @@ def sensor_men(sensor_menique):
 
 
 while True:
-    
+    """
+         Hacer el circuito para la conexion de servos
+    """
+
     sensor_pulgar=leercanal(0)#en el canal 2 de 8 esta el flex para el dedo anular
         
     sensor_indice=leercanal(1)#en el canal 0 de 8 esta el flex para el dedo anular
