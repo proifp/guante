@@ -3,14 +3,18 @@ import spidev
 from time import sleep
 import os
 from gpiozero import Servo
+from gpiozero import LED
 from time import sleep
 
-servo = Servo(18)
+#motor = LED(19)
+#motor1 = LED(26)
+servo = Servo(19)
 #Abrimos el bus SPI
 spi = spidev.SpiDev()#declaramos el objeto 
 spi.open(0,0)#SPIO
 spi.max_speed_hz= 1000000#declaramos la velocidad de trasnmision 1Mhz
 
+        
 def leercanal(canal):#recuerda que hablamos del canal del integrado
     adc = spi.xfer2([1, (8+canal)<<4,0]) 
     data = ((adc[1]&3) << 8) + adc[2]
@@ -25,23 +29,28 @@ def conversionvolts(data, digitos):
 def sensor_pull(sensor_pulgar):
     if(sensor_pulgar < 710 or sensor_pulgar > 770):
         print('-Flexionado sensor pulgar')
- 
+    
 def sensor_ind(sensor_indice):
-    if(sensor_indice < 800 or sensor_indice > 899):
+    if(sensor_indice < 851 or sensor_indice > 900):
         print('-Flexionado sensor indice')
         servo.max()
+        sleep(1)
+    elif(sensor_indice < 801 or sensor_indice > 850):
+        servo.mid()
+        sleep(1)
+    elif(sensor_indice < 750 or sensor_indice > 800):
+        servo.min()
         sleep(1)
 
 def sensor_mid(sensor_medio):
     if(sensor_medio < 700 or sensor_medio > 800):
+        
         print('-Flexionado sensor medio')
-        servo.mid()
-        sleep(1)
+    
 def sensor_anu(sensor_anular):
     if(sensor_anular < 700 or sensor_anular > 800):
         print('  -Flexionado sensor anular')
-        servo.min()
-        sleep(1)
+        
 def sensor_men(sensor_menique):
     if(sensor_menique < 700 or sensor_menique > 800):
         print('-Flexionado sensor meñique')
